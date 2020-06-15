@@ -1,1 +1,0 @@
-{'T': 3, 'B': 64, 'parent': 'btree-data/17.txt', 'leaf': True, 'keys': [4316], 'childs': ['btree-data/16.txt', 'btree-data/28.txt'], 'filename': 'btree-data/32.txt'}
