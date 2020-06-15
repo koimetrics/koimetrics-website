@@ -1,0 +1,56 @@
+{% extends 'web/base.html' %}
+{% load static %}
+{% load bootstrap4 %}
+{% block content %}
+
+<!-- Header -->
+<header class="masthead">
+    <div class="container" style="margin-top: 100px;">
+        <div class="row py-5">
+            <div class="col-md-6 mt-0">
+
+                <div class="intro-text">
+                    <div class="intro-heading mb-4">
+                        <h2>Log into your account</h2>
+                    </div>
+                    <div class="intro-subheading mb-4">
+                        {% if messages %}
+                            {% for message in messages %}
+                                <div class="alert {% if message.tags == 'error' %}alert-warning{% else %}alert-primary{% endif %} alert-dismissible fade show" role="alert">
+                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                        <span class="sr-only">Close</span>
+                                    </button>
+                                    <strong>{{message}}</strong>
+                                </div>
+                            {% endfor %}
+                        {% endif %}
+                        <form action="" method="POST">
+                            {% csrf_token %}
+                            {% for field in login_form.visible_fields %}
+                            <div class="form-group">
+                                {% bootstrap_field field %}
+                                {% for error in field.errors %}
+                                {{error}}
+                                {% endfor %}
+                            </div>
+                            {% endfor %}
+
+
+                            <button class="btn mt-2 btn-primary btn-style" type="submit">Log In</button>
+                        </form>
+                    </div>
+                    <h6 class="mt-3"><a href="">Forgot your password ?</a></h6>
+
+                </div>
+            </div>
+            <div class="col-md-6">
+                <img src="{% static '/web/images/man_doing_analytics.png' %}" alt="" class="img-fluid">
+            </div>
+        </div>
+    </div>
+</header>
+
+
+
+{% endblock %}

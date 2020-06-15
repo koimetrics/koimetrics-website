@@ -1,0 +1,33 @@
+{% extends 'dashboard/auth/base.html' %}
+{% load static %}
+{% load bootstrap4 %}
+{% block auth_content %}
+<div class="card-body register-card-body">
+  <p class="login-box-msg">Sign in to your account</p>
+
+  <form action="" method="post">
+    {% csrf_token %}
+    {% for field in login_form.visible_fields %}
+    <div class="form-group">
+      {% bootstrap_field field %}
+      {% for error in field.errors %}
+      {{error}}
+      {% endfor %}
+    </div>
+    {% endfor %}
+
+    <div class="row">
+      
+      <!-- /.col -->
+      <div class="col-12">
+        <button type="submit" class="btn btn-primary btn-block">Log in</button>
+      </div>
+      <!-- /.col -->
+    </div>
+  </form>
+
+  <div class="text-center mt-4"> 
+    <a href="{% url 'signup' %}" class="text-center">Create an account</a>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,305 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+
+<head>
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <title>Koimetrics, web analytics simplified.</title>
+
+  <!-- Google online fonts -->
+  <link href="//fonts.googleapis.com/css?family=Work+Sans:100,200,300,400,500,600,700,800,900&display=swap"
+    rel="stylesheet">
+  <link href="//fonts.googleapis.com/css?family=Open+Sans:300,400,600,700,800&display=swap" rel="stylesheet">
+  <!-- Template CSS -->
+  <link rel="stylesheet" href="{% static '/web/css/style-starter.css' %}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css"
+    integrity="sha256-h20CPZ0QyXlBuAw7A+KluUYx/3pK+c7lYEpqLTlxjYQ=" crossorigin="anonymous" />
+  <!-- Favicon -->
+  <link rel="shortcut icon" type="image/png" href="{% static 'web/images/kois-black.png' %}" />
+</head>
+
+<body>
+  <section class="w3l-header">
+    <nav class="navbar navbar-expand-lg fixed-top navbar-light bg-light">
+      <div class="container">
+        <a class="navbar-brand mr-0" href="{% url 'index' %}"><img src="{% static 'web/images/kois-black.png' %}" height="30" alt=""> <label for=""
+            class="logo-view">Koimetrics <sup style="font-size:medium"><sup>alpha</sup></sup></label></a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo02"
+          aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
+          <ul class="navbar-nav mr-auto mt-2 mt-lg-0 ml-lg-3">
+            <li class="nav-item active">
+              <a class="nav-link" href="{% url 'index' %}#">Home <span class="sr-only">(current)</span></a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'index' %}#about">About</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'index' %}#features">Features</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'index' %}#pricing">Pricing</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'index' %}#contact" >Contact</a>
+            </li>
+          </ul>
+          {% if user.is_authenticated %}
+          <a href="{% url 'home' %}" class="btn btn-dark mr-3">Panel</a>
+          <a href="{% url 'logout' %}" class="btn btn-outline-dark"><i class="fa fa-sign-out-alt"></i> Log out</a>
+          {% else %}
+          <a href="{% url 'signup' %}" class="btn btn-dark mr-3"><i class="fa fa-rocket"></i> Try it for FREE</a>
+          <a href="{% url 'login' %}" class="btn btn-outline-dark"><i class="fa fa-sign-in-alt"></i> Log in</a>
+          {% endif %}
+        </div>
+      </div>
+    </nav>
+  </section>
+
+  {% block content %}
+
+  {% endblock %}
+
+
+  <!-- footer -->
+  <footer class="w3l-footer">
+    <div class="footer-29 py-5">
+      <div class="container pb-lg-3">
+        <!--
+          <div class="row footer-top-29">
+            <div class="col-md-6 footer-list-29 footer-1 mt-md-4">
+              <h6 class="footer-title-29">Contact Us</h6>
+              <ul>
+                <li>
+                  <span class="fa fa-map-marker"></span>
+                  <p> Workflow, 433 California St, Suite 300 San Francisco, <br>CA 94104, USA</p>
+                </li>
+                <li>
+                  <span class="fa fa-phone"></span>
+                  <a href="tel:+44 99 555 42"> +44 99 555 42</a></li>
+                <li>
+                  <span class="fas fa-envelope"></span>
+                  <a href="mailto:contact@koimetrics.com" class="mail">
+                    contact@koimetrics.com</a></li>
+              </ul>
+              <div class="main-social-footer-29">
+                <a href="#facebook" class="facebook"><span class="fa fa-facebook"></span></a>
+                <a href="#twitter" class="twitter"><span class="fa fa-twitter"></span></a>
+                <a href="#instagram" class="instagram"><span class="fa fa-instagram"></span></a>
+                <a href="#google-plus" class="google-plus"><span class="fa fa-google-plus"></span></a>
+                <a href="#linkedin" class="linkedin"><span class="fa fa-linkedin"></span></a>
+              </div>
+            </div>
+
+            <div class="col-md-6 footer-list-29 footer-4 mt-md-4 mt-5">
+              <h6 class="footer-title-29">Subscribe</h6>
+              <p>Always know what’s happening in the
+                world of applications. Recieve all
+                latest post in your inbox.</p>
+              <form action="#" method="post" class="rightside-form mt-4">
+                <input type="email" name="email" placeholder="Enter your email">
+                <button type="submit" class="btn"><span class="fa fa-search" aria-hidden="true"></span></button>
+              </form>
+              </ul>
+            </div>
+          </div>-->
+        <div class="row bottom-copies text-center">
+          <p class="copy-footer-29 col-lg-12 ">©
+            <script>document.write(new Date().getFullYear())</script> Koimetrics. All rights reserved </p>
+
+        </div>
+      </div>
+    </div>
+    <!-- move top -->
+    <button onclick="topFunction()" id="movetop" class="bg-primary" title="Go to top">
+      <span class="fa fa-angle-up"></span>
+    </button>
+    <script>
+      // When the user scrolls down 20px from the top of the document, show the button
+      window.onscroll = function () {
+        scrollFunction()
+      };
+
+      function scrollFunction() {
+        if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+          document.getElementById("movetop").style.display = "block";
+        } else {
+          document.getElementById("movetop").style.display = "none";
+        }
+      }
+
+      // When the user clicks on the button, scroll to the top of the document
+      function topFunction() {
+        document.body.scrollTop = 0;
+        document.documentElement.scrollTop = 0;
+      }
+    </script>
+    <!-- /move top -->
+  </footer>
+  <!-- // footer -->
+
+  <!-- jQuery -->
+  <script src="{% static '/web/js/jquery-3.4.1.slim.min.js' %}"></script>
+  <!-- Bootstrap js -->
+  <script src="{% static '/web/js/bootstrap.min.js' %}"></script>
+
+  <!-- disable body scroll which navbar is in active -->
+  <script>
+    $(function () {
+      $('.navbar-toggler').click(function () {
+        $('body').toggleClass('noscroll');
+      })
+    });
+  </script>
+  <!-- disable body scroll which navbar is in active -->
+
+  <!-- pricing range -->
+  <script>
+    var pricings = {
+      "0": {
+        "traffic": "100",
+        "pricing": "0"
+      },
+      "1": {
+        "traffic": "1000",
+        "pricing": "3"
+      },
+      "2": {
+        "traffic": "5,000",
+        "pricing": "5"
+      },
+      "3": {
+        "traffic": "10,000",
+        "pricing": "9"
+      },
+      "4": {
+        "traffic": "20,000",
+        "pricing": "19"
+      },
+      "5": {
+        "traffic": "50,000",
+        "pricing": "29"
+      },
+      "6": {
+        "traffic": "100,000",
+        "pricing": "39"
+      },
+      
+    }
+    $("#traffic-range").val("0");
+
+    $('#traffic-range').on("input change" ,function () {
+      var val = String($(this).val());
+      $('#traffic-allowed').html(pricings[$('#traffic-range').val()].traffic);
+      $('#pricing-usd').html(pricings[$('#traffic-range').val()].pricing);
+    });
+  </script>
+
+  <script src="{% static '/web/js/owl.carousel.js' %}"></script>
+  <!-- script for teams1-->
+  <script>
+    $(document).ready(function () {
+      $('.owl-carousel').owlCarousel({
+        loop: true,
+        margin: 0,
+        responsiveClass: true,
+        responsive: {
+          0: {
+            items: 1,
+            nav: true
+          },
+          667: {
+            items: 2,
+            nav: true,
+            margin: 20
+          },
+          1000: {
+            items: 4,
+            nav: true,
+            loop: true,
+            margin: 25
+          }
+        }
+      })
+    })
+  </script>
+  <!-- //script for teams1-->
+
+  <script>
+    $(document).ready(function () {
+
+      var $menuBtn = $('.menu-btn');
+      var $nav = $('#nav');
+      var $stylebox = $('#style-box');
+      var $styleli = $stylebox.find('li');
+
+      $menuBtn.on('click', function () {
+        var $this = $(this);
+        var styles = $stylebox.data('styles');
+        $this.toggleClass("active");
+        $this.next('#nav').toggleClass("open");
+        $stylebox.toggleClass(styles);
+      });
+
+      $nav.addClass('topslide');
+
+      $styleli.on('click', function () {
+        var $this = $(this);
+        $this.siblings().removeClass('now');
+        $this.addClass('now');
+        var styles = $this.data('styles');
+        $nav.removeClass();
+        $nav.addClass(styles);
+        $nav.siblings('#style-box').removeClass();
+        $nav.siblings('#style-box').data('styles', styles);
+      });
+    });
+  </script>
+
+  <script src="{% static '/web/js/jquery.magnific-popup.min.js' %}"></script>
+  <script>
+    $(document).ready(function () {
+      $('.popup-with-zoom-anim').magnificPopup({
+        type: 'inline',
+
+        fixedContentPos: false,
+        fixedBgPos: true,
+
+        overflowY: 'auto',
+
+        closeBtnInside: true,
+        preloader: false,
+
+        midClick: true,
+        removalDelay: 300,
+        mainClass: 'my-mfp-zoom-in'
+      });
+
+      $('.popup-with-move-anim').magnificPopup({
+        type: 'inline',
+
+        fixedContentPos: false,
+        fixedBgPos: true,
+
+        overflowY: 'auto',
+
+        closeBtnInside: true,
+        preloader: false,
+
+        midClick: true,
+        removalDelay: 300,
+        mainClass: 'my-mfp-slide-bottom'
+      });
+    });
+  </script>
+  <script type="text/javascript" src="https://koimetrics.com/api/API/v1/xRpEJ79SwNHCxZ8DgTFap3/koimetrics.js"></script> 
+
+</body>
+
+</html>

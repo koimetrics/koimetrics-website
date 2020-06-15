@@ -1,0 +1,565 @@
+{% extends 'web/base.html' %}
+{% load static %}
+
+
+{% block content %}
+  <!-- index-block1 -->
+  <div class="w3l-index-block1">
+    <div class="content py-5 mt-5">
+      <div class="container py-lg-5">
+        <div class="row align-items-center">
+          <div class="col-lg-6 content-left">
+            <h3>Web analytics, simplified</h3>
+            <p class="mt-3 mb-lg-6 mb-4">
+
+              Koimetrics collects, enriches and delivers real-time data from your websites giving you and your business
+              a suite of tools to understand your visitors.
+
+            </p>
+            <a href="#features" class="btn btn-primary btn-style">Get Started</a>
+          </div>
+          <div class="col-lg-6 content-photo mt-lg-0 mt-5">
+            <img src="{% static '/web/images/man-analytics.png' %}" class="img-fluid" alt="main image">
+          </div>
+        </div>
+        <div class="clear"></div>
+      </div>
+    </div>
+  </div>
+  <!--
+  <section class="w3l-logos pb-5 pt-4">
+    <div class="container pb-lg-3">
+      <div class="row">
+        <div class="col-lg-3 col-6 logo-view">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6a/Falabella.svg/1200px-Falabella.svg.png"
+            alt="company-logo" class="img-fluid" />
+        </div>
+        <div class="col-lg-3 col-6 logo-view">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/cd/Accenture.svg/1200px-Accenture.svg.png"
+            alt="company-logo" class="img-fluid" />
+        </div>
+        <div class="col-lg-3 col-6 logo-view">
+          <img
+            src="data:image/png;base64,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"
+            alt="company-logo" class="img-fluid" />
+        </div>
+        <div class="col-lg-3 col-6 logo-view">
+          <img src="https://catalogo.vannichile.cl/wp-content/uploads/2019/07/cropped-logo-mav-1.png" alt="company-logo"
+            class="img-fluid" />
+        </div>
+      </div>
+  
+    </div>
+  </section> -->
+  <!-- //index-block1 -->
+  <section class="w3l-index5" id="about">
+    <div class="new-block py-5">
+      <div class="container py-lg-5">
+        <div class="middle-section text-center">
+          <div class="section-width">
+            <h2>
+              What is it and what it isn't
+            </h2>
+            <p class="mt-4">
+              Koimetrics.com is a personal project to allow people understand their websites traffic on real time, <br> in a visual and simple way. 
+              It is not oriented to show statisticall results of historicall visitors (there are plenty of tools out there to give you those results)
+
+              
+
+              
+
+            </p>
+          </div>
+          <!--
+          <div class="history-info mt-5">
+            <div class="position-relative">
+              <img src="assets/images/video.jpg" class="img-fluid rounded video-popup-image" alt="video-popup">
+               <a href="#popup-video" class="play-view text-center position-absolute">
+						<span class="video-play-icon">
+							<span class="fa fa-play"></span>
+						</span>
+					</a> 
+
+              <a href="#small-dialog" class="popup-with-zoom-anim play-view text-center position-absolute">
+                <span class="video-play-icon">
+                  <span class="fa fa-play"></span>
+                </span>
+              </a>
+
+               dialog itself, mfp-hide class is required to make dialog hidden
+              <div id="small-dialog" class="zoom-anim-dialog mfp-hide">
+                <iframe src="https://www.youtube.com/embed/Z_KspIX1oXU" allowfullscreen></iframe>
+              </div>
+
+              <!-- popup --
+            <div id="popup-video" class="pop-overlay">
+              <div class="popup">
+                <div class="align-popup-video">
+                  <iframe src="https://www.youtube.com/embed/Z_KspIX1oXU" allowfullscreen></iframe>
+                  <a class="close" href="#portfolio">×</a>
+                </div>
+
+              </div>
+            </div>
+            <!-- /popup 
+
+
+            </div>
+          </div>
+
+          <!-- dialog itself, mfp-hide class is required to make dialog hidden 
+          <div id="small-dialog" class="zoom-anim-dialog mfp-hide">
+            <iframe src="https://www.youtube.com/embed/Z_KspIX1oXU" allowfullscreen></iframe>
+          </div>-->
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="features" class="w3l-index3">
+    <div class="midd-w3 py-5">
+      <div class="container py-xl-5 py-lg-3">
+        <div class="row">
+          <div class="col-lg-6 left-wthree-img text-right">
+            <img src="{% static '/web/images/koimetrics-rt.png' %}" alt="" class="img-fluid rounded" />
+          </div>
+          <div class="col-lg-6 mt-lg-0 mt-5 about-right-faq">
+            <h6 class="text-primary">We show you results to success</h6>
+            <h3 class="text-da">Get all information about your websites traffic on real-time </h3>
+            {# <p class="mt-3">All of our plans will let you know:</p> #}
+            <ul class="w3l-right-book mt-4">
+              <li><span class="fa fa-check text-primary" aria-hidden="true"></span>Real time visitors connected to your website </li>
+              <li><span class="fa fa-check text-primary" aria-hidden="true"></span>Location of visitors via heatmap</li>
+              <li><span class="fa fa-check text-primary" aria-hidden="true"></span>Referral sites giving you your current traffic</li>
+              <li><span class="fa fa-check text-primary" aria-hidden="true"></span>What pages are watching your visitors</li>
+              <li><span class="fa fa-check text-primary" aria-hidden="true"></span>How visitors are moving throw your website</li>
+
+
+            </ul>
+            <a href="{% url 'signup' %}" class="btn btn-outline-style btn-outline-primary mt-4 py-3">Start my free trial</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <div class="video-responsive">
+    <video class="video" muted="muted" loop="loop" autoplay="autoplay">
+      <source src="{% static '/web/videos/meeting.mp4' %}" type="video/mp4">
+      Your browser does not support HTML5 video.
+    </video>
+
+    <canvas class="canvas"></canvas>
+
+    <div id="over_video">
+      <div class="bg-mask">
+        <div class="video-heading">
+          <h3>Try koimetrics free</h3>
+          <p>No credit card required.</p>
+          <a class="btn btn-light btn-outline-style py-3 mt-4" href="{% url 'signup' %}" title="Contact Us!"><span
+              class="fa fa-rocket mr-2"></span>Start now!</a>
+        </div>
+
+      </div>
+    </div>
+  </div>
+  <style>
+    .video-heading {
+      max-width: 750px;
+      margin: 0 auto;
+    }
+
+    .video-heading h3 {
+      font-size: 45px;
+      line-height: 58px;
+      text-transform: Capitalize;
+      font-weight: 600;
+      margin-bottom: 25px;
+      color: #fff;
+    }
+
+    .video-heading p {
+      margin: 0;
+      line-height: 28px;
+      font-size: 18px;
+      color: #fff;
+    }
+
+    .video-responsive {
+      padding-bottom: 400px;
+      position: relative;
+      width: 100%;
+    }
+
+    .canvas,
+    .video {
+      left: 0;
+      position: absolute;
+      top: 0;
+      background: #000;
+      z-index: 5;
+      overflow: hidden;
+      width: 100%;
+      height: 400px;
+      object-fit: cover;
+    }
+
+    #over_video {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      text-align: center;
+      top: 0;
+      z-index: 10;
+      color: #FFF;
+    }
+
+    .bg-mask {
+      background: rgba(0, 0, 0, 0.3);
+      height: inherit;
+      display: grid;
+      align-items: center;
+      padding: 0 15px;
+    }
+
+    @media screen and (max-width: 568px) {
+
+      .canvas,
+      .video {
+        height: 400px;
+      }
+
+      .video-heading h3 {
+        font-size: 35px;
+        line-height: 48px;
+        margin-bottom: 20px;
+      }
+
+      .video-heading p {
+        line-height: 26px;
+        font-size: 16px;
+      }
+    }
+  </style>
+
+  <script src="{% static '/web/js/canvas-video-player.js' %}"></script>
+
+
+  <script>
+    var isIOS = /iPad|iPhone|iPod/.test(navigator.platform);
+
+    if (isIOS) {
+
+      var canvasVideo = new CanvasVideoPlayer({
+        videoSelector: '.video',
+        canvasSelector: '.canvas',
+        timelineSelector: false,
+        autoplay: true,
+        makeLoop: true,
+        pauseOnClick: false,
+        audio: false
+      });
+
+    } else {
+
+      // Use HTML5 video
+      document.querySelectorAll('.canvas')[0].style.display = 'none';
+
+    }
+  </script>
+
+  <section id="pricing" class="pricing page-section pt-5 mt-5 py-5 d-none">
+    <style>
+      section .pricing .section-leading {}
+
+      .pricing .card {
+        border: none;
+        transition: all 0.2s;
+        box-shadow: 0 0.5rem 1rem 0 rgba(0, 0, 0, 0.1);
+      }
+
+      .pricing hr {
+        margin: 1.5rem 0;
+      }
+
+      .pricing .card-title {
+        margin: 0.5rem 0;
+        letter-spacing: .1rem;
+        font-weight: bold;
+      }
+
+      .pricing .card-price {
+        font-size: 3rem;
+        margin: 0;
+      }
+
+      .pricing .card-price .period {
+        font-size: 0.8rem;
+      }
+
+      .pricing ul li {
+        margin-bottom: 1rem;
+      }
+
+      .pricing .text-muted {
+        opacity: 0.7;
+      }
+
+      .pricing .btn {
+        font-size: 80%;
+        border-radius: 5rem;
+        letter-spacing: .1rem;
+        font-weight: bold;
+        padding: 1rem;
+        opacity: 0.7;
+        transition: all 0.2s;
+      }
+
+      /* Hover Effects on Card */
+
+      @media (min-width: 992px) {
+        .pricing .card:hover {
+          margin-top: -.25rem;
+          margin-bottom: .25rem;
+          box-shadow: 0 0.5rem 1rem 0 rgba(0, 0, 0, 0.3);
+        }
+
+        .pricing .card:hover .btn {
+          opacity: 1;
+        }
+      }
+    </style>
+    <style>
+      .slidecontainer {
+        width: 100%;
+      }
+
+      .slider {
+        -webkit-appearance: none;
+        width: 100%;
+        height: 25px;
+        background: #d3d3d3;
+        outline: none;
+        opacity: 0.7;
+        -webkit-transition: .2s;
+        transition: opacity .2s;
+      }
+
+      .slider:hover {
+        opacity: 1;
+      }
+
+      .slider::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        appearance: none;
+        width: 40px;
+        height: 40px;
+        border: 0;
+        background: url("{% static '/web/images/button-drag-x.png' %}");
+        background-size: cover;
+        cursor: pointer;
+      }
+
+      .slider::-moz-range-thumb {
+        width: 25px;
+        height: 25px;
+        border: 0;
+        background: url("{% static '/web/images/button-drag-x.png' %}");
+        background-size: cover;
+        cursor: pointer;
+      }
+    </style>
+    <div class="container pt-5">
+      <div class="middle-section text-center mb-5">
+        <div class="heading text-center">
+          <p>Pricings per website</p>
+          <h3 class="head mb-3">Pay just for websites you track</h3>
+          <p>and set requirements and pricing for every website you want to track, independently.</p>
+        </div>
+      </div>
+      <div class="row mt-5">
+        <div class=" col-md-7 text-center">
+          <img src="{% static '/web/images/woman-analytics.jpg' %}" alt="" class="img-fluid mb-3">
+        </div>
+        <div class="col-md-5">
+          <div class="card mb-5 mb-lg-0" style="border: #ccc 1px solid;">
+            <div class="card-body">
+<!---
+              <h1 class="card-title text-uppercase text-center">Plus</h1>
+              <hr>
+-->
+              <p class="text-center py-3">Track up to <strong><span id="traffic-allowed">100</span></strong> <br>
+                website views, everyday</p>
+                  <input type="range"  step="1" min="0" max="6" value="1" class="slider" id="traffic-range">
+              <h6 class="card-price text-center"><small style="font-size: medium;">USD</small> $<span
+                  id="pricing-usd">0</span><span class="period">/month</span></h6>
+              <ul class="fa-ul my-3 ml-4 pl-4">
+                <li ><span class="fa-li"></span><strong>ALL FEATURES ENABLED</strong></li>
+                <li class="mb-0 pb-0"><span class="fa-li"></span><i class="fas fa-check mr-4"></i>Number of daily visitors statistics</li>
+                <li class="mb-0 pb-0"><span class="fa-li"></span><i class="fas fa-check mr-4"></i>Traffic per page</li>
+                <li class="mb-0 pb-0"><span class="fa-li"></span><i class="fas fa-check mr-4"></i>Referrals statistics</li>
+                <li class="mb-0 pb-0"><span class="fa-li"></span><i class="fas fa-check mr-4"></i>Location heatmaps</li>
+                <li class="mb-0 pb-0"><span class="fa-li"></span><i class="fas fa-check mr-4"></i>Real time sessions</li>
+                <li class="mb-0 pb-0"><span class="fa-li"></span><i class="fas fa-check mr-4"></i>Track actions for specific IP</li>
+                <li class="mb-0 pb-0"><span class="fa-li"></span><i class="fas fa-check mr-4"></i>Export logs</li>
+                <li class="mb-0 pb-0"><span class="fa-li"></span><i class="fas fa-check mr-4"></i>Api access</li>
+              </ul>
+              <!--<a href="/signup" class="btn btn-block btn-primary text-uppercase">Sign Up</a>-->
+              <div class="text-center">
+                <a href="/signup" class="btn btn-sm btn-primary">Try koimetrics</a> <br>
+              </div>
+            </div>
+
+          </div>
+        </div>
+        
+      </div>
+    </div>
+  </section>
+
+
+  
+
+  <section class="w3l-contact pt-5" id="contact" 
+    
+  >
+    <div class="contact-infubd py-5">
+      <div class="container py-lg-12">
+        <div class="contact-grids">
+          <div class="col-lg-12 contact-left">
+            <div class="partners">
+              <div class="cont-details ">
+                <h5>Contact</h5>
+                <p class="mt-3 mb-4">For more information about this web analytics service, please feel comfortable to send me a message :)</p>
+                <h6 class="mb-4"> </h6>
+              </div>
+              <div class="hours">
+                <h6 class="mt-4">Email:</h6>
+                <p> <a href="mailto:luis.montanares.m@ug.uchile.cl">
+                    luis.montanares.m@ug.uchile.cl</a></p>
+                <h6 class="mt-4">Address:</h6>
+                <p> Santiago, Chile.</p>
+                
+                
+              </div>
+            </div>
+          </div>
+          {% comment %}
+          <div class="col-lg-6 mt-lg-0 mt-5 contact-right">
+            <form action="https://sendmail.w3layouts.com/submitForm" method="post" class="signin-form">
+              <div class="input-grids">
+                <div class="form-group">
+                  <input type="text" name="w3lName" id="w3lName" placeholder="Your Name*" class="contact-input">
+                </div>
+                <div class="form-group">
+                  <input type="email" name="w3lSender" id="w3lSender" placeholder="Your Email*" class="contact-input" required="">
+                </div>
+                <div class="form-group">
+                  <input type="text" name="w3lSubect" id="w3lSubect" placeholder="Subject*" class="contact-input">
+                </div>
+              </div>
+              <div class="form-group">
+                <textarea name="w3lMessage" id="w3lMessage" placeholder="Type your message here*" required=""></textarea>
+              </div>
+              <div class="text-right">
+                <button class="btn btn-primary btn-style">Send Message</button>
+              </div>
+            </form>
+          </div>
+          {% endcomment %}
+  
+        </div>
+       
+      </div>
+  </div></section>
+  <div class="w3l-index6" id="news">
+    <!-- grids block 5 
+  <section id="grids5-block" class="py-5">
+    <div class="container py-lg-3">
+      <div class="heading text-center">
+        <h3 class="head">Our Latest News</h3>
+        <p>Lorem ipsum dolor sit amet elit. Quo ut voluptate assumenda fugiat quas tempore.</p>
+      </div>
+      <div class="row">
+        <div class="col-lg-4 col-md-6 mt-5">
+          <div class="grids5-info">
+            <a href="#blog-single.html"><img src="assets/images/g6.jpg" alt="" class="rounded" /></a>
+            <div class="blog-info">
+              <h4><a href="#blog-single.html">Creative Websites Design</a></h4>
+              <ul class="blog-list">
+                <li>
+                  <p><span class="fa fa-calendar-o"></span> Jan 24, 2020</p>
+                </li>
+                <li>
+                  <p><span class="fa fa-comments-o"></span> <strong>23</strong> comments</p>
+                </li>
+              </ul>
+              <p>Nulla eu ipsum tempus est et vitae nulla empus est
+                suscipit et dolor amet.</p>
+              <a href="#blog-single.html" class="btn btn-outline-secondary mt-4">Read More</a>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-4 col-md-6 mt-5">
+          <div class="grids5-info">
+            <a href="#blog-single.html"><img src="assets/images/g2.jpg" alt="" class="rounded" /></a>
+            <div class="blog-info">
+              <h4><a href="#blog-single.html">SEO Optimization Services</a></h4>
+              <ul class="blog-list">
+                <li>
+                  <p><span class="fa fa-calendar-o"></span> Mar 14, 2020</p>
+                </li>
+                <li>
+                  <p><span class="fa fa-comments-o"></span> <strong>12</strong> comments</p>
+                </li>
+              </ul>
+              <p>Nulla eu ipsum tempus est et vitae nulla empus est
+                suscipit et dolor amet.</p>
+              <a href="#blog-single.html" class="btn btn-outline-secondary mt-4">Read More</a>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-4 offset-md-3 offset-lg-0 col-md-6 mt-5">
+          <div class="grids5-info">
+            <a href="#blog-single.html"><img src="assets/images/g3.jpg" alt="" class="rounded" /></a>
+            <div class="blog-info">
+              <h4><a href="#blog-single.html">Corporate Management</a></h4>
+              <ul class="blog-list">
+                <li>
+                  <p><span class="fa fa-calendar-o"></span> Oct 05, 2020</p>
+                </li>
+                <li>
+                  <p><span class="fa fa-comments-o"></span> <strong>16</strong> comments</p>
+                </li>
+              </ul>
+              <p>Nulla eu ipsum tempus est et vitae nulla empus est
+                suscipit et dolor amet.</p>
+              <a href="#blog-single.html" class="btn btn-outline-secondary mt-4">Read More</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  -->
+  </div>
+  <section class="w3l-index4">
+    <!--
+  <div class="section-four gotocontact py-5">
+    <div class="container py-xl-5 py-lg-3">
+      <div class="row align-items-center">
+        <div class="col-xl-7 col-lg-6">
+          <div class="heading white">
+            <h3>We have offered the best pricing
+              to make life easier!</h3>
+            <p class="mt-4">Consulting Agency for Your Business!</p>
+          </div>
+        </div>
+        <div class="offset-xl-1 offset-0 col-xl-3 col-lg-6 text-lg-right mt-5 mt-lg-0">
+          <a class="btn btn-light btn-outline-style py-3" href="contact.html" title="Contact Us!"><span
+              class="fa fa-location-arrow mr-2"></span>Contact Us!</a>
+        </div>
+      </div>
+    </div>
+  -->
+  </section>
+{% endblock %}

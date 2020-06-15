@@ -1,0 +1,445 @@
+{% extends 'dashboard/base.html' %}
+{% load static %}
+{% load bootstrap4 %}
+{% block extracss %}
+<style>
+  .bs-vertical-wizard {
+    border-right: 0 solid #eaecf1;
+    padding-bottom: 50px
+  }
+
+  .bs-vertical-wizard ul {
+    margin: 0;
+    padding: 0;
+    list-style: none
+  }
+
+  .bs-vertical-wizard ul>li {
+    display: block;
+    position: relative
+  }
+
+  .bs-vertical-wizard ul>li>span {
+    display: block;
+    padding: 10px 10px 10px 40px;
+    color: #333c4e;
+    font-size: 17px;
+    font-weight: 400;
+    letter-spacing: .8px
+  }
+
+  .bs-vertical-wizard ul>li>span:before {
+    content: '';
+    position: absolute;
+    width: 1px;
+    height: calc(100% - 25px);
+    background-color: #bdc2ce;
+    left: 13px;
+    bottom: -9px;
+    z-index: 3
+  }
+
+  .bs-vertical-wizard ul>li>span .ico {
+    pointer-events: none;
+    font-size: 14px;
+    position: absolute;
+    left: 10px;
+    top: 15px;
+    z-index: 2
+  }
+
+  .bs-vertical-wizard ul>li>span:after {
+    content: '';
+    position: absolute;
+    border: 2px solid #bdc2ce;
+    border-radius: 50%;
+    top: 14px;
+    left: 6px;
+    width: 16px;
+    height: 16px;
+    z-index: 3
+  }
+
+  .bs-vertical-wizard ul>li>span .desc {
+    display: block;
+    color: #68696d;
+    font-size: 12px;
+    font-weight: 400;
+    line-height: 1.8;
+    letter-spacing: .8px
+  }
+
+  .bs-vertical-wizard ul>li.complete>span:before {
+    background-color: #5cb85c;
+    opacity: 1;
+    height: calc(100% - 25px);
+    bottom: -9px
+  }
+
+  .bs-vertical-wizard ul>li.complete>span:after {
+    display: none
+  }
+
+  .bs-vertical-wizard ul>li.locked>span:after {
+    display: none
+  }
+
+  .bs-vertical-wizard ul>li:last-child>span:before {
+    display: none
+  }
+
+  .bs-vertical-wizard ul>li.complete>span .ico {
+    left: 8px
+  }
+
+  .bs-vertical-wizard ul>li>span .ico.ico-green {
+    color: #5cb85c
+  }
+
+  .bs-vertical-wizard ul>li>span .ico.ico-muted {
+    color: #bdc2ce
+  }
+
+  .bs-vertical-wizard ul>li.current {
+    background-color: #fff
+  }
+
+  .bs-vertical-wizard ul>li.current>a:before {
+    background-color: #ffe357;
+    opacity: 1
+  }
+
+  .bs-vertical-wizard ul>li.current>a:after {
+    border-color: #ffe357;
+    background-color: #ffe357;
+    opacity: 1
+  }
+
+  .bs-vertical-wizard ul>li.current:after {
+    border-color: rgba(255, 255, 255, 0);
+    border-left-color: #fff;
+    border-width: 10px;
+    margin-top: -10px
+  }
+
+  .bs-vertical-wizard ul>li.current:before {
+    border-color: rgba(234, 236, 241, 0);
+    border-left-color: #eaecf1;
+    border-width: 11px;
+    margin-top: -11px
+  }
+</style>
+<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+<!-- DataTables -->
+<link rel="stylesheet" href="{% static 'admin-lte/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css' %}">
+<link rel="stylesheet" href="{% static 'admin-lte/plugins/datatables-responsive/css/responsive.bootstrap4.min.css' %}">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css"
+  integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ=="
+  crossorigin="" />
+<script src="https://unpkg.com/leaflet@1.6.0/dist/leaflet.js"
+  integrity="sha512-gZwIG9x3wUXg2hdXF6+rVkLF/0Vi9U8D2Ntg4Ga5I5BZpVkVxlJWbSQtXPSiUTtC0TjtGOmxa1AJPuV0CPthew=="
+  crossorigin=""></script>
+
+{% endblock %}
+
+{% block content %}
+<!-- Content Header (Page header) -->
+<div class="content-header">
+  <div class="container-fluid">
+    <div class="row mb-2">
+      <div class="col-sm-6">
+        <h1 class="m-0 text-dark">{{website.url}}</h1>
+      </div><!-- /.col -->
+      <div class="col-sm-6">
+        <ol class="breadcrumb float-sm-right">
+          <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
+          <li class="breadcrumb-item active">websites</li>
+        </ol>
+      </div><!-- /.col -->
+    </div><!-- /.row -->
+  </div><!-- /.container-fluid -->
+</div>
+<!-- /.content-header -->
+
+<div class="container-fluid">
+  <div class="row">
+    {% if website.status == website.SCRIPT_VERIFIED %}
+    <div class="col-md-6">
+      <div class="card ">
+        <div class="card-header">
+          <h2 class="card-title"><i class="fas fa-chart-line"></i> Users connected to {{website.url}}</h2>
+
+          <div style="float: right;"">
+                    {% comment %}
+                    Real time
+                      <div class=" btn-group" id="realtime" data-toggle="btn-toggle">
+            <button type="button" class="btn btn-default btn-xs active" data-toggle="on">On</button>
+            <button type="button" class="btn btn-default btn-xs" data-toggle="off">Off</button>
+          </div>{% endcomment %}
+        </div>
+      </div>
+      <div class="card-body">
+
+        <div id="rt_chart"></div>
+      </div>
+      <!-- /.box-body-->
+    </div>
+  </div>
+  <div class="col-md-6">
+    <div class="card">
+      <div class="card-header">
+        Visitors location
+      </div>
+      <div class="card-body">
+        <div id="mapid" style="width: 100%; height: 400px;"></div>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-6">
+    <div class="card">
+      <div class="card-header">
+        Pages visit rank
+      </div>
+      <div class="card-body">
+        <div id="barChartContainer" style="width: 100%; height: 400px;"></div>
+      </div>
+    </div>
+  </div>
+
+
+
+
+
+  <form id="check_connections_form" class="d-none" action="{% url 'check_connections' %}" method="post">
+    {% csrf_token %}
+    <input type="text" name="website" value="{{website.id}}">
+    <input type="submit" value="Send">
+  </form>
+
+
+  {% endif %}
+
+
+  {% include 'dashboard/websites/components/status.html' %}
+  <!-- /.col -->
+
+</div>
+</div>
+{% endblock %}
+{% block extrajs %}
+
+
+<script>
+  $("#{{form.url.auto_id}}").change(() => {
+    if (document.getElementById("{{form.url.auto_id}}").checkValidity()) {
+      console.log("valid");
+      $("[trigger='#{{form.url.auto_id}}']").removeClass("disabled");
+    }
+    else {
+      console.log("invalid");
+      $("[trigger='#{{form.url.auto_id}}']").addClass("disabled");
+    }
+  })
+</script>
+{% if website.status == website.SCRIPT_VERIFIED %}
+<script>
+  var connected_users = [];
+  var pages = {};
+  var website = "{{website.url}}";
+  $("#check_connections_form").submit(function (event) {
+    event.preventDefault(); //prevent default action 
+    var post_url = $(this).attr("action"); //get form action url
+    var request_method = $(this).attr("method"); //get form GET/POST method
+    var form_data = $(this).serialize(); //Encode form elements for submission
+
+    $.ajax({
+      url: post_url,
+      type: request_method,
+      data: form_data
+    }).done(function (response) { //
+      connected_users = response;
+      pages = {};
+      connected_users.forEach((session)=> { 
+        if (Object.keys(pages).indexOf(session.path) > -1){
+          pages[session.path]++;
+        } else {
+          pages[session.path] = 1;
+        } 
+      });
+    });
+  });
+
+  function ajax_connections_form() {
+    $("#check_connections_form").submit();
+  }
+  ajax_connections_form();
+  setInterval(ajax_connections_form, 1000);
+
+</script>
+<!-- FLOT CHARTS -->
+<script src="{% static 'admin-lte/plugins/flot/jquery.flot.js' %}"></script>
+<!-- FLOT RESIZE PLUGIN - allows the chart to redraw when the window is resized -->
+<script src="{% static 'admin-lte/plugins/flot-old/jquery.flot.resize.min.js' %}"></script>
+<!-- FLOT PIE PLUGIN - also used to draw donut charts -->
+<script src="{% static 'admin-lte/plugins/flot-old/jquery.flot.pie.min.js' %}"></script>
+<script src="{% static 'assets/js/leaflet.heat.js' %}"></script>
+<!-- canvasjs -->
+<script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
+<!-- Page script -->
+
+<script>
+
+  var heat;
+  var mymap;
+  var locations;
+  var group;
+  var LeafIcon = L.Icon.extend({
+    options: {
+      iconSize: [20, 30],
+      shadowAnchor: [8, 20],
+      shadowSize: [0, 0],
+      iconSize: [20, 25],
+      iconAnchor: [8, 30] // horizontal puis vertical
+    }
+  });
+  var redIcon = new LeafIcon({ iconUrl: "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fupload.wikimedia.org%2Fwikipedia%2Fcommons%2Fthumb%2Fe%2Fed%2FMap_pin_icon.svg%2F1200px-Map_pin_icon.svg.png&f=1&nofb=1" });
+
+  setTimeout(function () {
+    mymap = L.map('mapid').setView([51.505, -0.09], 1);;
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+      maxZoom: 10,
+      minZoom: 1,
+      attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, ' +
+        '<a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
+        'Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+      id: 'mapbox/streets-v11',
+      tileSize: 512,
+      zoomOffset: -1,
+    }).addTo(mymap);
+
+    if (connected_users.length) {
+      locations = connected_users.map((el) => [el.latitude, el.longitude]);
+      group = L.layerGroup(connected_users.map((el) => L.marker([el.latitude, el.longitude], { icon: redIcon }).bindPopup(el.ip)));
+      //mymap.fitBounds(group.getBounds());
+      //heat = L.heatLayer(locations, { radius: 25 });
+      mymap.addLayer(group);
+    }
+  }, 1000);
+
+  setInterval(function () {
+    mymap.removeLayer(group);
+    locations = connected_users.map((el) => [el.latitude, el.longitude]);
+    group = new L.featureGroup(connected_users.map((el) => L.marker([el.latitude + Math.random() * 0.001, el.longitude + Math.random() * 0.001], { icon: redIcon }).bindPopup(el.ip)));
+    //heat = L.heatLayer(locations, { radius: 25 });
+    if (locations.length) {
+      mymap.addLayer(group);
+    }
+  }, 2800);
+
+
+
+</script>
+<script>
+  function getData() {
+    return connected_users.length
+  }
+
+  var layout = {
+    title: 'Online users',
+    title: true,
+    margin: {
+      l: 80,
+      r: 30,
+      b: 50,
+      t: 30,
+      pad: 5
+    },
+    autosize: true,
+    height: 400,
+
+    xaxis: {
+      title: {
+        text: 'Seconds',
+        font: {
+          family: 'Courier New, monospace',
+          size: 18,
+          color: '#7f7f7f'
+        }
+      },
+    },
+    yaxis: {
+      title: {
+        text: 'Online visitors',
+        font: {
+          family: 'Courier New, monospace',
+          size: 18,
+          color: '#7f7f7f'
+        }
+      }
+    }
+  };
+
+  setTimeout(function () {
+    Plotly.plot('rt_chart', [{
+      y: [getData()],
+      type: 'line',
+    }], layout, { displayModeBar: false })
+    var cnt = 0;
+    setInterval(function () {
+      Plotly.extendTraces('rt_chart', { y: [[getData()]] }, [0])
+      cnt++;
+      if (cnt > 60) {
+        Plotly.relayout('rt_chart', {
+          xaxis: {
+            range: [cnt - 60, cnt]
+          }
+        })
+      }
+    }, 1000)
+  }, 1500)
+
+
+</script>
+<script type="text/javascript">
+  var barchart;
+  setTimeout(function () {
+    barchart = new CanvasJS.Chart("barChartContainer", {
+      title:{
+        text: ""              
+      },
+      axisY: {
+        title: "Online visitors",
+      },
+      axisX: {
+        title: "website pages",
+      },
+      data: [              
+      {
+        // Change type to "doughnut", "line", "splineArea", etc.
+        type: "column",
+        dataPoints: [
+          
+        ]
+      }
+      ]
+    });
+    barchart.render();
+  }, 1500);
+
+  function updatePagesViewsChart() {
+    var pages_list = [];
+    Object.keys(pages).forEach( (k) => pages_list.push({page: k, views: pages[k]}) )
+    pages_list.sort( (a,b) => (a.views > b.views) ? 1 : -1 );
+    var dps = [];
+    pages_list.forEach(function(p){
+      dps.push( {label: website + p.page, x: dps.length, y: p.views} );
+    });
+
+    barchart.options.data[0].dataPoints = dps; 
+    barchart.render();
+  };
+  setInterval(function() {updatePagesViewsChart()}, 2500);
+</script>
+{% endif %}
+
+{% endblock %}

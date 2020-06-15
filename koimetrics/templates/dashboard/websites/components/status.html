@@ -1,0 +1,162 @@
+<div class="col-md-12">
+    <!-- interactive chart -->
+    <div class="card {% if website.status == website.SCRIPT_VERIFIED %} collapsed-card {% endif %}">
+        {% if website.status == website.URL_VERIFIED %}
+        <div class="card-header">
+            <h2 class="card-title"><i class="fas fa-plus"></i> Website registration</h2>
+        </div>
+        {% endif %}
+        {% if website.status == website.SCRIPT_VERIFIED %}
+        <div class="card-header ">
+            <h2 class="card-title"><i class="fas fa-plus"></i> Website registration</h2>
+
+            <div class="card-tools">
+                <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                    <i class="fas fa-plus"></i>
+                </button>
+
+            </div>
+        </div>
+        {% endif %}
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-5">
+                    <div class="bs-vertical-wizard">
+                        <ul>
+                            <li class="complete">
+                                <span>Check website url<i class="ico fa fa-check ico-green"></i>
+                                    <span class="desc">This step allows us to check we will track the correct
+                                        website.</span>
+                                </span>
+                            </li>
+                            {% if website.status == website.SCRIPT_VERIFIED %}
+                            <li class="complete">
+                                <span href="#">Insert tracking script <i class="ico fa fa-check ico-green"></i>
+                                    <span class="desc">The script will caught data from sessions on your website to show
+                                        you results on real time.</span>
+                                </span>
+                            </li>
+                            <li class="complete">
+                                <span href="#">Start tracking<i class="ico fa fa-check ico-green"></i>
+                                    <span class="desc">Your site has been properly configured to start tracking your
+                                        visitors.</span>
+                                </span>
+                            </li>
+                            {% else %}
+                            <li class="current">
+                                <span href="#">Insert tracking script
+                                    <span class="desc">The script will caught data from sessions on your website to show
+                                        you results on real time.</span>
+                                </span>
+                            </li>
+                            <li class="locked">
+                                <span href="#">Start tracking<i class="ico fa fa-lock text-muted"></i>
+                                    <span class="desc">Your site has been properly configured to start tracking your
+                                        visitors.</span>
+                                </span>
+                            </li>
+                            {% endif %}
+
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-md-7">
+                    {% if website.status == website.URL_VERIFIED %}
+                    <h3>2. Insert tracking script</h3>
+                    Insert the following code into the pages of your websites you want to watch real time traffic: <br>
+                    <br>
+                    <div class="mb-2"
+                        style="font-size: small; padding: 5px; color: #fff; background-color: #444; border-radius: 5px;">
+
+                        &lt;<span style="color: rgb(255, 95, 95)">script</span> <span
+                            style="color: aqua">type</span>=<span style="color: greenyellow">"text/javascript"</span>
+                        <span style="color: aqua">src</span>=<span
+                            style="color:greenyellow">"{{website.koimetrics_script}}"</span>&gt;&lt;/<span
+                            style="color: rgb(255, 95, 95)">script</span>&gt;
+                    </div>
+                    <form action="{% url 'check_script' %}" method="post">
+                        {% csrf_token %}
+                        <input type="hidden" name="website" value="{{website.id}}">
+                        <button class="btn btn-primary">Verify <i class="ml-3 fas fa-arrow-right"></i>
+                        </button>
+                    </form>
+
+                    {% if messages %}
+                    {% for message in messages %}
+                    {% if message.tags == 'error' %}
+                    <div class="alert alert-warning mt-4" role="alert">
+
+                        <small>
+                            If you are having problems with this step, send me a message to
+                            luis.montanares.m@outlook.com
+                        </small>
+                    </div>
+
+                    {% endif %}
+                    {% endfor %}
+
+                    {% endif %}
+                    {% endif %}
+                    {% if website.status == website.SCRIPT_VERIFIED %}
+                    <h3>3. The installation process is complete</h3>
+                    You are ready to track live sessions of your website <br> <br>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        <!-- /.box-body-->
+    </div>
+    <!-- /.box -->
+
+</div>
+
+<div class="col-md-12">
+    <div class="card collapsed-card">
+        <div class="card-header">
+            <h2 class="card-title"><i class="fas fa-trash"></i> Remove website</h2>
+            <div class="card-tools">
+                <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                    <i class="fas fa-plus"></i>
+                </button>
+
+            </div>
+
+        </div>
+        <div class="card-body">
+            <!-- Button trigger modal -->
+            <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#removeModal">
+                Remove this website
+            </button>
+
+            <!-- Modal -->
+            <div class="modal fade" id="removeModal" tabindex="-1" role="dialog" aria-labelledby="removeModal"
+                aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <form action="{% url 'remove' %}" method="post">
+                            {% csrf_token %}
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel">Remove confirmation</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                To remove this website please write <strong>{{website.url}}</strong> in the box bellow
+                                <div class="form-group">
+                                    <label for="box-confirm">Confirmation:</label>
+                                    <input type="hidden" name="apikey" value="{{website.apikey}}">
+                                    <input required type="text" class="form-control" name="url" placeholder="{{website.url}}" pattern="{{website.url}}" id="box-confirm">
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                <button type="submit" class="btn btn-primary">Commit</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
