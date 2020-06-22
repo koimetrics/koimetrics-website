@@ -167,16 +167,14 @@
     <div class="col-md-6">
       <div class="card ">
         <div class="card-header">
-          <h2 class="card-title"><i class="fas fa-chart-line"></i> Users connected to {{website.url}}</h2>
+          <h2 class="card-title"><i class="fas fa-chart-line"></i> Users connected</h2>
+          <div class="card-tools">
 
-          <div style="float: right;"">
-                    {% comment %}
-                    Real time
-                      <div class=" btn-group" id="realtime" data-toggle="btn-toggle">
-            <button type="button" class="btn btn-default btn-xs active" data-toggle="on">On</button>
-            <button type="button" class="btn btn-default btn-xs" data-toggle="off">Off</button>
-          </div>{% endcomment %}
-        </div>
+            <button type="button" class="btn btn-tool" data-card-widget="collapse" data-toggle="tooltip" title="Collapse">
+              <i class="fas fa-minus"></i></button>
+            
+          </div>
+          
       </div>
       <div class="card-body">
 
@@ -188,20 +186,65 @@
   <div class="col-md-6">
     <div class="card">
       <div class="card-header">
-        Visitors location
+        <h3 class="card-title"><i class="fas fa-map-marked-alt"></i> Visitors location</h3>
+        <div class="card-tools">
+          <button type="button" class="btn btn-tool" data-card-widget="collapse" data-toggle="tooltip" title="Collapse">
+            <i class="fas fa-minus"></i></button>
+          
+        </div>
+      </div>
+      <div class="card-body p-1">
+        <div id="mapid" style="width: 100%; height: 430px;"></div>
+      </div>
+      
+    </div>
+    
+  </div>
+  <div class="col-md-6">
+    <div class="card">
+      <div class="card-header">
+        <div class="card-title">
+          <i class="fas fa-chart-bar"></i> Pages visitors
+        </div>
+        <div class="card-tools">
+          <button type="button" class="btn btn-tool" data-card-widget="collapse" data-toggle="tooltip" title="Collapse">
+            <i class="fas fa-minus"></i></button>
+          
+        </div>
       </div>
       <div class="card-body">
-        <div id="mapid" style="width: 100%; height: 400px;"></div>
+        <div id="barChartContainer" style="width: 100%; height: 400px;"></div>
       </div>
     </div>
   </div>
   <div class="col-md-6">
     <div class="card">
       <div class="card-header">
-        Pages visit rank
+          <div class="card-title">
+            <i class="fas fa-users"></i> Sessions data
+          </div>
+          <div class="card-tools">
+            <input type="text" class="sessions-filter"  placeholder="Filter sessions"  style="border: 1px #ccc solid; border-radius: 3px; padding-left: 5px; color: #555;" class="btn-tool">
+            
+            <button type="button" class="btn btn-tool" data-card-widget="collapse" data-toggle="tooltip" title="Collapse">
+              <i class="fas fa-minus"></i></button>
+          </div>
       </div>
-      <div class="card-body">
-        <div id="barChartContainer" style="width: 100%; height: 400px;"></div>
+
+      <div class="card-body p-0">
+        <div class="clusterize">
+          
+          <div id="scrollArea" class="clusterize-scroll table-responsive">
+            <table class="table">
+              <tbody id="contentArea" class="clusterize-content sessions_table">
+                <tr class="clusterize-no-data">
+                  <td>Loading data</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        
       </div>
     </div>
   </div>
@@ -285,161 +328,12 @@
 <script src="{% static 'assets/js/leaflet.heat.js' %}"></script>
 <!-- canvasjs -->
 <script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
+<!-- Clusterize JS -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/clusterize.js@0.18.1/clusterize.css">
+<script src="https://cdn.jsdelivr.net/npm/clusterize.js@0.18.1/clusterize.min.js"></script>
 <!-- Page script -->
-
-<script>
-
-  var heat;
-  var mymap;
-  var locations;
-  var group;
-  var LeafIcon = L.Icon.extend({
-    options: {
-      iconSize: [20, 30],
-      shadowAnchor: [8, 20],
-      shadowSize: [0, 0],
-      iconSize: [20, 25],
-      iconAnchor: [8, 30] // horizontal puis vertical
-    }
-  });
-  var redIcon = new LeafIcon({ iconUrl: "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fupload.wikimedia.org%2Fwikipedia%2Fcommons%2Fthumb%2Fe%2Fed%2FMap_pin_icon.svg%2F1200px-Map_pin_icon.svg.png&f=1&nofb=1" });
-
-  setTimeout(function () {
-    mymap = L.map('mapid').setView([51.505, -0.09], 1);;
-    L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
-      maxZoom: 10,
-      minZoom: 1,
-      attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, ' +
-        '<a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
-        'Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
-      id: 'mapbox/streets-v11',
-      tileSize: 512,
-      zoomOffset: -1,
-    }).addTo(mymap);
-
-    if (connected_users.length) {
-      locations = connected_users.map((el) => [el.latitude, el.longitude]);
-      group = L.layerGroup(connected_users.map((el) => L.marker([el.latitude, el.longitude], { icon: redIcon }).bindPopup(el.ip)));
-      //mymap.fitBounds(group.getBounds());
-      //heat = L.heatLayer(locations, { radius: 25 });
-      mymap.addLayer(group);
-    }
-  }, 1000);
-
-  setInterval(function () {
-    mymap.removeLayer(group);
-    locations = connected_users.map((el) => [el.latitude, el.longitude]);
-    group = new L.featureGroup(connected_users.map((el) => L.marker([el.latitude + Math.random() * 0.001, el.longitude + Math.random() * 0.001], { icon: redIcon }).bindPopup(el.ip)));
-    //heat = L.heatLayer(locations, { radius: 25 });
-    if (locations.length) {
-      mymap.addLayer(group);
-    }
-  }, 2800);
-
-
-
-</script>
-<script>
-  function getData() {
-    return connected_users.length
-  }
-
-  var layout = {
-    title: 'Online users',
-    title: true,
-    margin: {
-      l: 80,
-      r: 30,
-      b: 50,
-      t: 30,
-      pad: 5
-    },
-    autosize: true,
-    height: 400,
-
-    xaxis: {
-      title: {
-        text: 'Seconds',
-        font: {
-          family: 'Courier New, monospace',
-          size: 18,
-          color: '#7f7f7f'
-        }
-      },
-    },
-    yaxis: {
-      title: {
-        text: 'Online visitors',
-        font: {
-          family: 'Courier New, monospace',
-          size: 18,
-          color: '#7f7f7f'
-        }
-      }
-    }
-  };
-
-  setTimeout(function () {
-    Plotly.plot('rt_chart', [{
-      y: [getData()],
-      type: 'line',
-    }], layout, { displayModeBar: false })
-    var cnt = 0;
-    setInterval(function () {
-      Plotly.extendTraces('rt_chart', { y: [[getData()]] }, [0])
-      cnt++;
-      if (cnt > 60) {
-        Plotly.relayout('rt_chart', {
-          xaxis: {
-            range: [cnt - 60, cnt]
-          }
-        })
-      }
-    }, 1000)
-  }, 1500)
-
-
-</script>
-<script type="text/javascript">
-  var barchart;
-  setTimeout(function () {
-    barchart = new CanvasJS.Chart("barChartContainer", {
-      title:{
-        text: ""              
-      },
-      axisY: {
-        title: "Online visitors",
-      },
-      axisX: {
-        title: "website pages",
-      },
-      data: [              
-      {
-        // Change type to "doughnut", "line", "splineArea", etc.
-        type: "column",
-        dataPoints: [
-          
-        ]
-      }
-      ]
-    });
-    barchart.render();
-  }, 1500);
-
-  function updatePagesViewsChart() {
-    var pages_list = [];
-    Object.keys(pages).forEach( (k) => pages_list.push({page: k, views: pages[k]}) )
-    pages_list.sort( (a,b) => (a.views > b.views) ? 1 : -1 );
-    var dps = [];
-    pages_list.forEach(function(p){
-      dps.push( {label: website + p.page, x: dps.length, y: p.views} );
-    });
-
-    barchart.options.data[0].dataPoints = dps; 
-    barchart.render();
-  };
-  setInterval(function() {updatePagesViewsChart()}, 2500);
-</script>
+<script src="{% static 'assets/js/results.js' %}"></script>
+  
 {% endif %}
 
 {% endblock %}
